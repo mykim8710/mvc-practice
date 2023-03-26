@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.reflection.ReflectionTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-03-26T13:59:35" hostname="mykim-MacBook-Pro.local" time="0.036">
+  <properties/>
+  <testcase name="Heap 영역에 로드돼 있는 User Class의 정보를 가져온다." classname="com.example.reflection.ReflectionTest" time="0.036"/>
+  <system-out><![CDATA[22:59:35.087 [Test worker] DEBUG com.example.reflection.ReflectionTest - userClazz = [class com.example.reflection.model.User]
+22:59:35.090 [Test worker] DEBUG com.example.reflection.ReflectionTest - userClazz2 = [class com.example.reflection.model.User]
+22:59:35.090 [Test worker] DEBUG com.example.reflection.ReflectionTest - userClazz3 = [class com.example.reflection.model.User]
+userClazz = class com.example.reflection.model.User
+userClazz2 = class com.example.reflection.model.User
+userClazz3 = class com.example.reflection.model.User
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
