@@ -1,3 +1,4 @@
 # Project exclude paths
 /.gradle/
 /webapps/WEB-INF/classes/
+/.idea/
