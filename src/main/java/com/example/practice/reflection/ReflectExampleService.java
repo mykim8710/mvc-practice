@@ -1,7 +1,7 @@
 package com.example.practice.reflection;
 
-import com.example.practice.reflection.annotation.Service;
+import com.example.practice.reflection.annotation.ReflectService;
 
-@Service
+@ReflectService
 public class ReflectExampleService {
 }

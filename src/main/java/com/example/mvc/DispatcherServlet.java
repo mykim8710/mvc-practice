@@ -1,7 +1,12 @@
 package com.example.mvc;
 
-import com.example.mvc.controller.Controller;
 import com.example.mvc.enums.RequestHttpMethod;
+import com.example.mvc.handleradapter.AnnotationHandlerAdapter;
+import com.example.mvc.handleradapter.HandlerAdapter;
+import com.example.mvc.handleradapter.SimpleControllerHandlerAdapter;
+import com.example.mvc.handlermapping.AnnotationHandlerMapping;
+import com.example.mvc.handlermapping.HandlerMapping;
+import com.example.mvc.handlermapping.RequestHandlerMapping;
 import com.example.mvc.view.ModelAndView;
 import com.example.mvc.view.View;
 import com.example.mvc.view.resolver.HtmlResolver;
@@ -19,6 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 클라이언트로부터 요청이 오면 가장먼저 DispatcherServlet이 작동
@@ -27,28 +33,29 @@ import java.util.Map;
 @WebServlet("/") // 어떤 경로로 요청이 들어와 이 서블릿이 실행
 public class DispatcherServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
-    private RequestHandlerMapping handlerMapping;
-
+    private List<HandlerMapping> handlerMappings;
     private List<HandlerAdapter> handlerAdapters;
     private Map<String, ViewResolver> viewResolvers = new HashMap<>();
 
-    //List<ViewResolver> resolvers;
-
-
+    // DispatcherServlet의 초기화 메서드(최초 한번 실행)
     @Override
     public void init() throws ServletException {
-        handlerMapping = new RequestHandlerMapping();
-        handlerMapping.init();   // 초기화
+        // handlerMapping 초기화
+        // [in memory(static, hard coding) HandlerMapping]
+        RequestHandlerMapping requestHandlerMapping = new RequestHandlerMapping();
+        requestHandlerMapping.init();
+
+        // annotation 방식 HandlerMapping
+        AnnotationHandlerMapping annotationHandlerMapping = new AnnotationHandlerMapping("com.example.mvc");
+        annotationHandlerMapping.init();
+
+        handlerMappings = List.of(requestHandlerMapping, annotationHandlerMapping);
 
 
         // HandlerAdapter 등록(초기화)
-        handlerAdapters = List.of(new SimpleControllerHandlerAdapter());
-
+        handlerAdapters = List.of(new SimpleControllerHandlerAdapter(), new AnnotationHandlerAdapter());
 
         // ViewResolver 등록(초기화)
-        //resolvers = Collections.singletonList(new JspViewResolver()); // 인자가 하나일 경우
-        //resolvers = List.of(new JspViewResolver(), new HtmlResolver());// 인자가 여러개일 경우
-
         // ViewResolver가 여러개임을 가정, 예제에서는 JSP만 사용할 예정
         viewResolvers.put("JSP", new JspViewResolver());
         viewResolvers.put("HTML", new HtmlResolver());
@@ -56,19 +63,29 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.info("[DispatcherServlet] service started. urlPath : {}, httpMethod : {}", request.getRequestURI(), request.getMethod());    // DispatcherServlet이 모든 요청을 받음
+        final String requestURI = request.getRequestURI();
+        final RequestHttpMethod requestHttpMethod = RequestHttpMethod.valueOf(request.getMethod());
+
+        logger.info("[DispatcherServlet] service started. urlPath : {}, httpMethod : {}", requestURI, requestHttpMethod);    // DispatcherServlet이 모든 요청을 받음
 
         try {
             // 1. handlerMapping에서 handler룰 찾는다.(handlerKey 맞는 handler(Controller) 반환 + 비지니스 로직)
-            Controller handler = handlerMapping.findHandlerByHandlerKey(new HandlerKey(request.getRequestURI(), RequestHttpMethod.valueOf(request.getMethod())));
+            HandlerKey handlerKey = new HandlerKey(requestURI, requestHttpMethod);
+            Object handler = handlerMappings.stream()
+                                            .filter(hm -> hm.findHandlerByHandlerKey(handlerKey) != null)
+                                            .map(hm -> hm.findHandlerByHandlerKey(handlerKey))
+                                            .findFirst()
+                                            .orElseThrow(() -> new ServletException("No handler for [" + requestURI + ", " + requestHttpMethod + "]"));
 
-            // 2. HandlerAdapter에서 이 handler를 지원하는지 확인한 뒤
+
+
+            // 2. HandlerAdapter에서 해당 handler를 지원하는지 확인한 뒤
             HandlerAdapter adapter = handlerAdapters.stream()
                                                     .filter(handlerAdapter -> handlerAdapter.support(handler))
                                                     .findFirst()
                                                     .orElseThrow(() -> new ServletException("No adapter for handler [" + handler + "]"));
 
-            // 지원한다면 handler를 실행하고 ModelAndView 리턴받는다.
+            // 지원한다면 HandlerAdapter가 handler를 실행하고 ModelAndView 리턴받는다.
             ModelAndView modelAndView = adapter.handler(request, response, handler);
             /**
              * ModelAndView
@@ -79,17 +96,13 @@ public class DispatcherServlet extends HttpServlet {
              */
 
 
-            // ViewResolver가 여러개라면 당연히 Map에서 맞는 ViewResolver를 가져오는 로직이 필요하지만 지금은 JSP만사용하므로 아래처럼 진행
-            /*for (ViewResolver resolver: resolvers) {
-                View view = resolver.resolver(viewPath);
-                view.render(new HashMap<>(), request, response);
-            }*/
-
-            // 3. 맞는 ViewResolver를 가져온다.
+            // 3. 해당하는 ViewResolver를 가져온다.
             JspViewResolver jspViewResolver = (JspViewResolver)viewResolvers.get("JSP");
+
 
             // 4. ViewResolver에서 viewPath에 맞는 View를 리턴받는다.
             View view = jspViewResolver.resolver(modelAndView.getViewPath());
+
 
             // 5. View를 랜더링 한다.
             view.render(modelAndView.getModel(), request, response);

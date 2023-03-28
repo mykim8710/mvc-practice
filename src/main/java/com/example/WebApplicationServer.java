@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
+// webapps/WEB-INF/classes
 public class WebApplicationServer {
     private static final Logger log = LoggerFactory.getLogger(WebApplicationServer.class);
 

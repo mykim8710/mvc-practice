@@ -1,7 +1,7 @@
 package com.example.practice.reflection;
 
-import com.example.practice.reflection.annotation.Controller;
-import com.example.practice.reflection.annotation.Service;
+import com.example.practice.reflection.annotation.ReflectController;
+import com.example.practice.reflection.annotation.ReflectService;
 import com.example.practice.reflection.model.People;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -28,14 +28,14 @@ public class ReflectionTest {
         Reflections reflections = new Reflections("com.example");   // com.example 패키지 하부의 클래스에 대해 리플렉션을 사용할 것이다.
 
         Set<Class<?>> beans = new HashSet<>();
-        beans.addAll(reflections.getTypesAnnotatedWith(Controller.class));// @Controller 어노테이션이 포함된 클래스를 Set에 담는다.(중복 X, Set이기 때문)
+        beans.addAll(reflections.getTypesAnnotatedWith(ReflectController.class));// @Controller 어노테이션이 포함된 클래스를 Set에 담는다.(중복 X, Set이기 때문)
 
         logger.debug("beans = {}", beans);
     }
     @Test
     @DisplayName("@Controller, @Service 어노테이션이 있는 클래스를 찾아서 출력한다.")
     void controllerAndServiceScanTest() throws Exception{
-        Set<Class<?>> beans = getTypesWithAnnotation(List.of(Controller.class, Service.class));
+        Set<Class<?>> beans = getTypesWithAnnotation(List.of(ReflectController.class, ReflectService.class));
         logger.debug("beans = {}", beans);
     }
 
