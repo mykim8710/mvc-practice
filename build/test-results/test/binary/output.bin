@@ -1,6 +1,0 @@
-22:59:35.087 [Test worker] DEBUG com.example.reflection.ReflectionTest - userClazz = [class com.example.reflection.model.User]
-€22:59:35.090 [Test worker] DEBUG com.example.reflection.ReflectionTest - userClazz2 = [class com.example.reflection.model.User]
-€22:59:35.090 [Test worker] DEBUG com.example.reflection.ReflectionTest - userClazz3 = [class com.example.reflection.model.User]
-4userClazz = class com.example.reflection.model.User
-5userClazz2 = class com.example.reflection.model.User
-5userClazz3 = class com.example.reflection.model.User
