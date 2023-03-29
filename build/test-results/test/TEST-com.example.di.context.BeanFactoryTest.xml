@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.di.context.BeanFactoryTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-03-29T12:38:33" hostname="mykim-MacBook-Pro.local" time="0.122">
+  <properties/>
+  <testcase name="초기화 된 BeanFactory에서 FooController와 FooController에 주입된 UserService를 가지고온다." classname="com.example.di.context.BeanFactoryTest" time="0.122"/>
+  <system-out><![CDATA[21:38:33,061 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+21:38:33,061 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+21:38:33,061 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/kimminyoung/Desktop/dev/FastCampus/code/part1/mvc-practice/build/resources/main/logback.xml]
+21:38:33,092 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+21:38:33,093 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+21:38:33,095 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+21:38:33,103 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - This appender no longer admits a layout as a sub-component, set an encoder instead.
+21:38:33,103 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - To ensure compatibility, wrapping your layout in LayoutWrappingEncoder.
+21:38:33,103 |-WARN in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also http://logback.qos.ch/codes.html#layoutInsteadOfEncoder for details
+21:38:33,103 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.example] to DEBUG
+21:38:33,103 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to INFO
+21:38:33,103 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+21:38:33,103 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+21:38:33,103 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@33aeca0b - Registering current configuration as safe fallback point
+
+21:38:33.131 [INFO ] [Test worker] [org.reflections.Reflections] - Reflections took 21 ms to scan 2 urls, producing 5 keys and 8 values 
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
